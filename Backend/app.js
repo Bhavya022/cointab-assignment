@@ -1,13 +1,15 @@
 const express = require('express');
+const cors = require('cors'); // Import the cors module
 const app = express();
 const sequelize = require('./config/db.config');
 const userRoutes = require('./routes/userRoutes');
 const postRoutes = require('./routes/postRoutes');
 const excelRoutes = require('./routes/excelRoutes');
 
-const PORT = process.env.PORT || 3000; // Default port is 3000, but can be overridden with environment variable
+const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(cors()); // Enable CORS for all routes
 
 app.use('/users', userRoutes);
 app.use('/posts', postRoutes);
