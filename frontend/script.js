@@ -4,15 +4,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to handle adding user to database
     const addUserToDatabase = (user) => {
-        const userData = {
-            name: user.querySelector('.name').textContent,
-            email: user.querySelector('.email').textContent,
-            phone: user.querySelector('.phone').textContent,
-            website: user.querySelector('.website').textContent,
-            city: user.querySelector('.city').textContent,
-            company: user.querySelector('.company').textContent
-        };
+        const name = user.querySelector('.name').textContent.split(': ')[1];
+    const email = user.querySelector('.email').textContent.split(': ')[1];
+    const phone = user.querySelector('.phone').textContent.split(': ')[1];
+    const website = user.querySelector('.website').textContent.split(': ')[1];
+    const city = user.querySelector('.city').textContent.split(': ')[1];
+    const company = user.querySelector('.company').textContent.split(': ')[1];
 
+    const userData = {
+        name,
+        email,
+        phone,
+        website,
+        city,
+        company
+    };
+      console.log(userData) 
         fetch('http://localhost:3000/users', {
             method: 'POST',
             headers: {
