@@ -15,30 +15,32 @@ const UserController = {
 
   addUser: async (req, res) => {
     try {
-      const { name, email, phone, website, city, company } = req.body;
-      
+      const {  name, email, phone, website, city, company,userId } = req.body; 
+      console.log(id)
       // Validate user input
-      if (!name || !email || !phone || !website || !city || !company) {
+      if (!name || !email || !phone || !website || !city || !company || !userId) {
         return res.status(400).json({ message: 'All fields are required' });
       }
-
+         
       // Check if the user already exists
-      const existingUser = await User.findOne({ where: { email } });
+      const existingUser = await User.findOne({ where: { email } }); 
       if (existingUser) {
-        return res.status(400).json({ message: 'User already exists' });
+        return res.status(201).json({ message: 'User already exists' }); 
       }
 
       // Create the new user
       const newUser = await User.create({
+        
         name,
         email,
         phone,
         website,
         city,
-        company
+        company,
+        userId 
       });
 
-      res.status(201).json(newUser);
+      res.status(201).json(newUser); 
     } catch (error) {
       console.error('Error adding user:', error);
       res.status(500).json({ message: 'Failed to add user' });
@@ -51,7 +53,7 @@ const UserController = {
       const { email } = req.query;
       const user = await User.findOne({ where: { email } });
       if (!user) {
-        return res.status(404).json({ message: 'User not found' });
+        return res.status(201).json({ message: 'User not found' });
       }
       res.status(200).json(user);
     } catch (error) {

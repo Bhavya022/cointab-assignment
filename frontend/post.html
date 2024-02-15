@@ -4,14 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Post Page</title>
-  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./post.css">
 </head>
 <body>
   <h1>Post Page</h1>
-  <div id="user-info"></div>
+  <div id="user-info">
+    <h2>Name: <span id="user-name"></span></h2>
+    <h2>Company: <span id="company-name"></span></h2>
+  </div>
   <div id="post-container"></div>
   <button id="bulk-add-btn">Bulk Add</button>
-  <button id="download-excel-btn">Download In Excel</button>
-  <script src="post.js"></script>
+  <button id="download-excel-btn" style="display: none;">Download in Excel</button>
+  <script src="./postScript.js"></script>
 </body>
 </html>
