@@ -1,24 +1,18 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db.config');
+const sequelize = require('../utils/database');
 
 const Post = sequelize.define('Post', {
   userId: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: false
   },
   title: {
     type: DataTypes.STRING,
-    allowNull: false,
-    validate: {
-      notEmpty: true,
-    }
+    allowNull: false
   },
   body: {
     type: DataTypes.TEXT,
-    allowNull: false,
-    validate: {
-      notEmpty: true,
-    }
+    allowNull: false
   }
 });
 

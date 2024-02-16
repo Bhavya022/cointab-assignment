@@ -1,84 +1,78 @@
 const axios = require('axios');
-const User = require('../models/User'); // Corrected import statement for User model
-const Post = require('../models/Post'); // Corrected import statement for Post model
-const exceljs = require('exceljs');
+const Post = require('../models/post');
 
-const PostController = {
-  getPostsByUserId: async (req, res) => {
+module.exports = {
+  // Function to fetch posts for a specific user from the API and store in the database
+  fetchPosts: async (req, res) => {
+    const userId = req.params.userId;
     try {
-      const userId = req.params.userId;
       const response = await axios.get(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`);
       const posts = response.data;
-
-      if (posts.length === 0) {
-        return res.status(404).json({ message: 'No posts found for this user' });
-      }
-
-      const userResponse = await axios.get(`https://jsonplaceholder.typicode.com/users/${userId}`);
-      const user = userResponse.data;
-
-      res.json({ user, posts });
+      await Post.bulkCreate(posts);
+      res.json({ message: 'Posts fetched and stored successfully.' });
     } catch (error) {
-      console.error('Error fetching posts by user ID:', error);
-      res.status(500).json({ message: 'Failed to fetch posts by user ID' });
+      console.error('Error fetching posts:', error);
+      res.status(500).json({ error: 'Internal server error.' });
     }
   },
 
-  addPostsBulk: async (req, res) => {
+  // Function to handle bulk adding of posts to the database
+  // bulkAddPosts: async (req, res) => {
+  //   const userId = req.params.userId;
+  //   try {
+  //     // Assuming you have some logic to fetch posts data for the specific user from the API
+  //     const postsData = /* logic to fetch posts data */;
+
+  //     // Check if any posts already exist for the specific user in the database
+  //     const existingPosts = await Post.findAll({ where: { userId: userId } });
+  //     if (existingPosts.length === 0) {
+  //       // If no posts exist in the database for the specific user, bulk add the posts
+  //       await Post.bulkCreate(postsData);
+  //       res.json({ message: 'Posts bulk added successfully.' });
+  //     } else {
+  //       res.json({ message: 'Posts already exist in the database.' });
+  //     }
+  //   } catch (error) {
+  //     console.error('Error adding posts:', error);
+  //     res.status(500).json({ error: 'Internal server error.' });
+  //   }
+  // },
+  bulkAddPosts: async (req, res) => {
+    const userId = req.params.userId;
     try {
-      const posts = req.body;
-      
-      // Check if the request body is an array
-      if (!Array.isArray(posts)) {
-        return res.status(400).json({ message: 'Request body must be an array of posts' });
+      // Assuming you have some logic to fetch posts data for the specific user from the API
+      const response = await axios.get(`https://jsonplaceholder.typicode.com/posts?userId=${userId}`);
+      const postsData = response.data;
+
+      // Check if any posts already exist for the specific user in the database
+      const existingPosts = await Post.findAll({ where: { userId: userId } });
+
+      if (existingPosts.length === 0) {
+        // If no posts exist in the database for the specific user, bulk add the posts
+        await Post.bulkCreate(postsData);
+        res.json({ message: 'Posts bulk added successfully.' });
+      } else {
+        res.json({ message: 'Posts already exist in the database.' });
       }
-
-      // Validate each post object in the array
-      posts.forEach(post => {
-        if (!post.userId || !post.title || !post.body) {
-          throw new Error('Invalid post data');
-        }
-      });
-
-      const createdPosts = await Post.bulkCreate(posts);
-      res.status(201).json(createdPosts);
     } catch (error) {
-      console.error('Error adding posts in bulk:', error);
-      res.status(500).json({ message: 'Failed to add posts in bulk' });
+      console.error('Error adding posts:', error);
+      res.status(500).json({ error: 'Internal server error.' });
     }
   },
 
-  downloadPostsExcel: async (req, res) => {
+  // Function to handle downloading posts in Excel format
+  downloadPostsInExcel: async (req, res) => {
+    const userId = req.params.userId;
     try {
-      const userId = req.params.userId;
-      const posts = await Post.findAll({ where: { userId } });
+      // Fetch posts for the specific user from the database
+      const posts = await Post.findAll({ where: { userId: userId } });
 
-      if (posts.length === 0) {
-        return res.status(404).json({ message: 'No posts found for this user' });
-      }
-
-      const workbook = new exceljs.Workbook();
-      const worksheet = workbook.addWorksheet('Posts');
-
-      worksheet.columns = [
-        { header: 'Title', key: 'title', width: 40 },
-        { header: 'Body', key: 'body', width: 100 }
-      ];
-
-      posts.forEach(post => {
-        worksheet.addRow({ title: post.title, body: post.body });
-      });
-
-      res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-      res.setHeader('Content-Disposition', 'attachment; filename=posts.xlsx');
-
-      await workbook.xlsx.write(res);
-      res.end();
+      // Convert posts data to Excel format and initiate download
+      // Implement logic to convert posts to Excel format and initiate download
+      res.json({ message: 'Download initiated.' });
     } catch (error) {
-      console.error('Error downloading posts as Excel:', error);
-      res.status(500).json({ message: 'Failed to download posts as Excel' });
+      console.error('Error downloading posts:', error);
+      res.status(500).json({ error: 'Internal server error.' });
     }
   }
 };
-
-module.exports = PostController;

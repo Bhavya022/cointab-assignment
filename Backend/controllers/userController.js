@@ -1,66 +1,73 @@
 const axios = require('axios');
-const User = require('../models/User');
+const User = require('../models/user');
 
-const UserController = {
-  getAllUsers: async (req, res) => {
+module.exports = {
+  fetchAllUsers: async (req, res) => {
     try {
       const response = await axios.get('https://jsonplaceholder.typicode.com/users');
       const users = response.data;
-      res.json(users);
-    } catch (error) {
+      
+      // Check if any users already exist in the database
+      const existingUsers = await User.findAll();
+      if (existingUsers.length === 0) {
+          // If no users exist in the database, store fetched users
+          await User.bulkCreate(users);
+      }
+
+      // Send JSON response with user data
+      res.json({ users: existingUsers });
+  } catch (error) {
       console.error('Error fetching users:', error);
-      res.status(500).json({ message: 'Failed to fetch users from the external API' });
-    }
-  },
+      res.status(500).json({ error: 'Internal server error.' });
+  }
+},
 
-  addUser: async (req, res) => {
+
+  // Function to fetch a user by ID
+  fetchUserById: async (req, res) => {
     try {
-      const {  name, email, phone, website, city, company,userId } = req.body; 
-      console.log(id)
-      // Validate user input
-      if (!name || !email || !phone || !website || !city || !company || !userId) {
-        return res.status(400).json({ message: 'All fields are required' });
-      }
-         
-      // Check if the user already exists
-      const existingUser = await User.findOne({ where: { email } }); 
-      if (existingUser) {
-        return res.status(201).json({ message: 'User already exists' }); 
-      }
-
-      // Create the new user
-      const newUser = await User.create({
-        
-        name,
-        email,
-        phone,
-        website,
-        city,
-        company,
-        userId 
-      });
-
-      res.status(201).json(newUser); 
+      const userId = req.params.id;
+      const user = await User.findByPk(userId);
+      res.json(user);
     } catch (error) {
-      console.error('Error adding user:', error);
-      res.status(500).json({ message: 'Failed to add user' });
+      console.error('Error fetching user by ID:', error);
+      res.status(500).json({ error: 'Internal server error.' });
     }
   },
 
-  // Fetch user by email
-  getUserByEmail: async (req, res) => {
+  // Function to fetch a user by email
+  fetchUserByEmail: async (req, res) => {
     try {
-      const { email } = req.query;
-      const user = await User.findOne({ where: { email } });
-      if (!user) {
-        return res.status(201).json({ message: 'User not found' });
-      }
-      res.status(200).json(user);
+      const userEmail = req.params.email;
+      const user = await User.findOne({ where: { email: userEmail } });
+      res.json(user);
     } catch (error) {
       console.error('Error fetching user by email:', error);
-      res.status(500).json({ message: 'Failed to fetch user by email' });
+      res.status(500).json({ error: 'Internal server error.' });
+    }
+  },
+
+  // Function to add a user to the database
+  addUser: async (req, res) => {
+    try {
+      const user = req.body;
+      console.log(user) 
+      // Check if the user already exists in the database
+      const existingUser = await User.findOne({ where: { email: user.email } });
+
+      if (existingUser) {
+        // If user exists, show "Open" button and hide "Add" button 
+        console.log( 'User already exists.')
+        res.json({ message: 'User already exists.', showOpenButton: true });
+      } else {
+        // If user doesn't exist, add to database and show "Open" button
+        await User.create(user); 
+        res.json({ message: 'User added successfully.', showOpenButton: true }); 
+        console.log( 'User added.')
+      }
+    } catch (error) {
+      console.error('Error adding user:', error);
+      res.status(500).json({ error: 'Internal server error.',error });
     }
   }
 };
-
-module.exports = UserController;

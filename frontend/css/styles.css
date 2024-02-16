@@ -1,0 +1,42 @@
+/* Styles for the user list */
+.user {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  
+  /* Styles for buttons */
+  button {
+    padding: 5px 10px;
+    margin-right: 10px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+  }
+  
+  /* Styles for buttons on hover */
+  button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Hide the "Open" button by default */
+  .openBtn {
+    display: none;
+  }
+  
+  /* Styles for the "Cointab SE-ASSIGNMENT" heading */
+  h1 {
+    font-size: 24px;
+    color: #333;
+  }
+  
+  /* Styles for the entire page */
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f8f9fa;
+  }
+  

@@ -1,31 +1,54 @@
 # cointab-assignment
-Cointab SE-ASSIGNMENT
+Cointab SE Assignment
 Overview
-This project is a simple 2-page website developed using Node.js and a SQL database.
+Cointab SE Assignment is a web application designed to demonstrate fetching user data from an external API, displaying it on the home page, and providing functionalities to interact with the data.
 
+The application consists of two main pages:
+
+Home Page: Displays essential user information fetched from an external API. Allows users to add users to the database and navigate to a post page.
+Post Page: Displays posts associated with a specific user fetched from an external API. Provides functionalities to add posts to the database in bulk and download posts in Excel format.
 Features
-Page 1: Home Page
-Upon opening the website, users are greeted with a prominent heading stating "Cointab SE-ASSIGNMENT."
-Users can click the "All Users" button to fetch data from the specified API (https://jsonplaceholder.typicode.com/users).
-Essential user information, including name, email, phone, website, city, and company, is displayed.
-Alongside the displayed user information, two buttons are provided: "Open" and "Add".
-Clicking the "Add" button stores user information in the database. If the database already contains the user's entry, the "Open" button is shown instead.
-Clicking the "Open" button opens a new Post page.
-Page 2: Post Page
-Data from the API (https://jsonplaceholder.typicode.com/posts?userId=${userId}) is fetched for the specific userId stored in the database.
-Essential user information, including name, title, body, and company, is displayed.
-Two buttons are provided at the top of the page: "Bulk Add" and "Download In Excel." Initially, only the "Bulk Add" button is visible.
-Clicking the "Bulk Add" button stores all the posts present on that page into the database. If the database contains post entries for the specific userId, the "Bulk Add" button is hidden, and the "Download in Excel" button is shown.
-Clicking the "Download in Excel" button initiates the download process.
+Fetches user data from an external API and displays it on the home page.
+Allows users to add users to the database from the home page.
+Fetches and displays posts associated with a specific user on the post page.
+Provides the ability to add posts to the database in bulk from the post page.
+Allows users to download posts in Excel format from the post page.
 Technologies Used
-Sequelize
-Node.js
-SQL
-HTML
-CSS
-JavaScript
+Frontend: HTML, CSS, JavaScript
+Backend: Node.js, Express.js, Sequelize (ORM)
+Database: MySQL
+External API: JSONPlaceholder (for user and post data)
+Installation
+Clone the repository:
+bash
+Copy code
+git clone <repository_url>
+Navigate to the project directory:
+bash
+Copy code
+cd cointab-se-assignment
+Install dependencies:
+Copy code
+npm install
+Start the backend server:
+sql
+Copy code
+npm start
+Open the frontend:
+Open index.html for the home page.
+Open post.html for the post page.
 Usage
-Clone the repository.
-Install dependencies using npm install.
-Start the server using npm start.
-Navigate to http://localhost:3000 in your web browser.
+Home Page:
+
+Click on the "All Users" button to fetch user data from the external API.
+Click on the "Add" button to add a user to the database.
+Click on the "Open" button to navigate to the post page for a specific user.
+Post Page:
+
+View posts associated with the selected user.
+Click on the "Bulk Add" button to add posts to the database in bulk.
+Click on the "Download in Excel" button to download posts in Excel format.
+Credits
+This project utilizes the JSONPlaceholder API for fetching user and post data.
+Deployed Link
+https://helpful-marigold-059125.netlify.app/

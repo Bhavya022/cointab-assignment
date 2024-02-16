@@ -1,14 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const UserController = require('../controllers/userController');
+const userController = require('../controllers/userController');
 
-// Route to get all users
-router.get('/', UserController.getAllUsers);
+// Route to fetch all users from the API and store in the database
+router.get('/fetchUsers', userController.fetchAllUsers);
 
-// Route to add a new user
-router.post('/', UserController.addUser); 
+// Route to fetch a user by ID
+router.get('/fetchUserById/:id', userController.fetchUserById);
 
-// Route to get a user by email
-router.get('/email', UserController.getUserByEmail);
+// Route to fetch a user by email
+router.get('/fetchUserByEmail/:email', userController.fetchUserByEmail);
+
+// Route to add a user to the database
+router.post('/addUser', userController.addUser);
 
 module.exports = router;

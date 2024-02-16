@@ -1,29 +1,27 @@
 const express = require('express');
-const cors = require('cors'); // Import the cors module
-const app = express();
-const sequelize = require('./config/db.config');
+const bodyParser = require('body-parser');
 const userRoutes = require('./routes/userRoutes');
 const postRoutes = require('./routes/postRoutes');
-const excelRoutes = require('./routes/excelRoutes');
+const sequelize = require('./utils/database');
+const cors = require('cors')
+const app = express();
 
-const PORT = process.env.PORT || 3000;
-
-app.use(express.json());
-app.use(cors()); // Enable CORS for all routes
-
+// Middleware
+app.use(bodyParser.json());
+app.use(cors())
+// Routes
 app.use('/users', userRoutes);
 app.use('/posts', postRoutes);
-app.use('/excel', excelRoutes);
 
-sequelize.sync()
-  .then(() => {
-    console.log('Database synced');
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
-  })
-  .catch(err => {
-    console.error('Error syncing database:', err);
-  });
+// Database synchronization
+sequelize.sync().then(() => {
+  console.log('Database synced successfully.');
+}).catch(error => {
+  console.error('Error syncing database:', error);
+});
 
-module.exports = app;
+// Start the server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
