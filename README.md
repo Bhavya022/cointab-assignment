@@ -55,5 +55,7 @@ Click on the "Download in Excel" button to download posts in Excel format.
 Credits
 This project utilizes the JSONPlaceholder API for fetching user and post data.
 
-Deployed Link
+Deployed Lin
 View the deployed application
+https://helpful-marigold-059125.netlify.app/ 
+https://cointab-assignment-gwnr.onrender.com/
